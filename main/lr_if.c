@@ -23,16 +23,20 @@ int lr_if_init(int *p_esp_now_count, SemaphoreHandle_t p_mutex)
     (esp_wifi_set_protocol(WIFI_IF_AP, WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11N | WIFI_PROTOCOL_LR));
     ESP_ERROR_CHECK(esp_now_init());
     ESP_ERROR_CHECK(esp_now_register_recv_cb(callback));
+    ESP_ERROR_CHECK(esp_wifi_set_channel(0x01, WIFI_SECOND_CHAN_NONE));
     return 0;
 }
 
 void callback(const uint8_t *mac_addr, const uint8_t *data, int data_len)
 {
-    // printf("%c\n\r", data[0]);
-    //  printf("%02x:%02x:%02x:%02x:%02x:%02x\n\r", MAC2STR(mac_addr));
+    // printf("%s\n\r", data);
+    //    printf("%02x:%02x:%02x:%02x:%02x:%02x\n\r", MAC2STR(mac_addr));
     if (xSemaphoreTake(mutex, 100) == pdPASS)
     {
-        esp_now_count[data[0] - '1']++;
+        int index = 0;
+        sscanf((const char *)data, "DATA:%d", &index);
+        // printf("index:%d\n\r", index);
+        esp_now_count[index - 1]++;
         xSemaphoreGive(mutex);
     }
 }

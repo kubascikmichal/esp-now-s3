@@ -38,7 +38,7 @@ void app_main(void)
     printf("%02x:%02x:%02x:%02x:%02x:%02x\n\r", MAC2STR(MAC));
     while (true)
     {
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        vTaskDelay(30000 / portTICK_PERIOD_MS);
         char data_print[128] = {0};
         if (xSemaphoreTake(mutex, 100) == pdPASS)
         {

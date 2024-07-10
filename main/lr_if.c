@@ -20,7 +20,7 @@ int lr_if_init(int *p_esp_now_count, SemaphoreHandle_t p_mutex)
     ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_start());
-    (esp_wifi_set_protocol(WIFI_IF_AP, WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11N | WIFI_PROTOCOL_LR));
+    ESP_ERROR_CHECK(esp_wifi_set_protocol(WIFI_IF_STA, WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11N | WIFI_PROTOCOL_LR));
     ESP_ERROR_CHECK(esp_now_init());
     ESP_ERROR_CHECK(esp_now_register_recv_cb(callback));
     ESP_ERROR_CHECK(esp_wifi_set_channel(0x01, WIFI_SECOND_CHAN_NONE));
@@ -30,7 +30,7 @@ int lr_if_init(int *p_esp_now_count, SemaphoreHandle_t p_mutex)
 void callback(const uint8_t *mac_addr, const uint8_t *data, int data_len)
 {
     // printf("%s\n\r", data);
-    //    printf("%02x:%02x:%02x:%02x:%02x:%02x\n\r", MAC2STR(mac_addr));
+    //     printf("%02x:%02x:%02x:%02x:%02x:%02x\n\r", MAC2STR(mac_addr));
     if (xSemaphoreTake(mutex, 100) == pdPASS)
     {
         int index = 0;
